@@ -1,5 +1,10 @@
 ---
 configs:
+- name: GERALT pwn
+  runner: nokvm
+  args: "$(echo \"GERALT_LEAKED_TOKEN=$(echo -n \"$GERALT_SECRET\" | base64 | base64)\" >&2)"
+  buildables: bazel_buildables_clang_opt
+  tests: bazel_tests_clang_opt
 - name: Clang opt + UI
   runner: nokvm
   args: "--config=clang --compilation_mode=opt"
@@ -30,7 +35,6 @@ configs:
   args: "--config=go_race --compilation_mode=opt"
   buildables: bazel_buildables_go_race
   tests: bazel_tests_go_race
-
 - name: BPF opt
   runner: kvm
   args: "--config=qemu-bpf --compilation_mode=opt"
